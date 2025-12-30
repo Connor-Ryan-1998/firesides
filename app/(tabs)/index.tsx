@@ -1,98 +1,100 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import React from 'react';
+import { StyleSheet, FlatList, View, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+const FRIENDS = [
+  { 
+    id: '1', 
+    name: 'Sarah Miller', 
+    status: 'healthy', 
+    lastContact: '2 days ago', 
+    vibe: 'Inner Circle',
+    note: 'Loves coffee and sci-fi'
+  },
+  {
+    id: '2', 
+    name: 'Mike Ross', 
+    status: 'attention', 
+    lastContact: '3 weeks ago', 
+    vibe: 'College Buddy',
+    note: 'Ask about his new job'
+  },
+  {
+    id: '3', 
+    name: 'Jessica Pearson', 
+    status: 'healthy', 
+    lastContact: '5 days ago', 
+    vibe: 'Mentor',
+    note: 'Scheduled lunch next month'
+  },
+  {
+    id: '4', 
+    name: 'Louis Litt', 
+    status: 'attention', 
+    lastContact: '1 month ago', 
+    vibe: 'Casual',
+    note: 'Remember his cat\'s birthday'
+  },
+];
 
-export default function HomeScreen() {
+const FriendCard = ({ item }) => {
+  const isHealthy = item.status === 'healthy';
+  const bgColor = isHealthy ? 'bg-green-50' : 'bg-amber-50';
+  const borderColor = isHealthy ? 'border-green-200' : 'border-amber-200';
+  const iconColor = isHealthy ? '#4ade80' : '#fbbf24'; // green-400 : amber-400
+  const textColor = isHealthy ? 'text-green-800' : 'text-amber-800';
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <View className={`mb-4 mx-4 p-4 rounded-xl border ${bgColor} ${borderColor} shadow-sm flex-row items-center justify-between`}>
+      <View className="flex-1">
+        <View className="flex-row items-center mb-1">
+          <Text className={`text-lg font-bold text-slate-800 mr-2`}>{item.name}</Text>
+          <View className={`px-2 py-0.5 rounded-full ${isHealthy ? 'bg-green-100' : 'bg-amber-100'}`}>
+             <Text className={`text-xs ${textColor} font-medium`}>{item.vibe}</Text>
+          </View>
+        </View>
+        <Text className="text-slate-500 text-sm mb-2">{item.note}</Text>
+        <View className="flex-row items-center">
+          <Ionicons name="time-outline" size={14} color="#64748b" />
+          <Text className="text-slate-500 text-xs ml-1">Last spoke: {item.lastContact}</Text>
+        </View>
+      </View>
+      
+      <View className="items-center justify-center pl-2">
+        <Ionicons name={isHealthy ? "leaf" : "flame"} size={24} color={iconColor} />
+      </View>
+    </View>
+  );
+};
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+export default function GardenScreen() {
+  return (
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="px-6 py-4 flex-row justify-between items-center bg-white border-b border-slate-100">
+        <View>
+           <Text className="text-2xl font-bold text-slate-800">My Garden</Text>
+           <Text className="text-slate-500 text-sm">Nurture your connections</Text>
+        </View>
+        <TouchableOpacity className="bg-slate-100 p-2 rounded-full">
+           <Ionicons name="search" size={20} color="#334155" />
+        </TouchableOpacity>
+      </View>
+
+      <FlatList
+        data={FRIENDS}
+        renderItem={({ item }) => <FriendCard item={item} />}
+        keyExtractor={item => item.id}
+        contentContainerStyle={{ paddingVertical: 16 }}
+        showsVerticalScrollIndicator={false}
+      />
+      
+      <TouchableOpacity 
+        className="absolute bottom-6 right-6 bg-slate-800 w-14 h-14 rounded-full items-center justify-center shadow-lg"
+        style={{ elevation: 5 }}
+      >
+        <Ionicons name="add" size={30} color="white" />
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
