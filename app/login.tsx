@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform } from 'react-native';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../src/services/firebase';
+import { useAuth } from '../src/context/AuthContext';
 import { useRouter } from 'expo-router';
 
 export default function LoginScreen() {
@@ -9,14 +8,15 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   const router = useRouter();
+  const { signIn, signUp } = useAuth();
 
   const handleAuth = async () => {
     try {
       if (isSignUp) {
-        await createUserWithEmailAndPassword(auth, email, password);
+        await signUp(email, password);
         Alert.alert("Success", "Account created!");
       } else {
-        await signInWithEmailAndPassword(auth, email, password);
+        await signIn(email, password);
       }
       router.replace('/(tabs)');
     } catch (error) {
